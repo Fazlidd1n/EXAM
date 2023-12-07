@@ -1,0 +1,33 @@
+version: '3.11'
+
+
+services:
+  bot:
+    build: .
+    restart: always
+    container_name: save_bot
+    environment:
+      BOT_TOKEN: 6334253807:AAHuBzG7B-hIlQw41Fw2TTYHiWaQ1XxF6lY
+      DB_NAME: postgres
+      DB_PASSWORD: 1
+      DB_HOST: pg
+      DB_USER: postgres
+      DB_PORT: 5432
+    depends_on:
+      - pg
+    command: python3 task3.py
+
+
+  pg:
+    image: postgres
+    restart: always
+    container_name: save_bot_db
+    environment:
+      POSTGRES_PASSWORD: 1
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+
+volumes:
+  pg_data:
