@@ -53,7 +53,7 @@ Base.metadata.create_all(engine)
 
 @dp.message(CommandStart())
 async def start_handler(msg: Message, state: FSMContext):
-    User.insert(msg.from_user.id, msg.from_user.full_name, msg.from_user.username)
+    User.insert(Base,msg.from_user.id, msg.from_user.full_name, msg.from_user.username)
     await msg.answer(f"Hello - 👤 {msg.from_user.full_name}")
     print(f"👤 - {msg.from_user.full_name}")
 
