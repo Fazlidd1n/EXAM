@@ -16,13 +16,12 @@ class Menu(StatesGroup):
 
 
 def menu_buttons():
-    new_post = KeyboardButton(text="News 📨")
+    new_post = KeyboardButton(text="New Posts 📨")
     return ReplyKeyboardMarkup(keyboard=[[new_post]], resize_keyboard=True, one_time_keyboard=True)
 
 
 @dp.message(CommandStart())
 async def start_handler(msg: Message, state: FSMContext):
-    await msg.answer("Ustoz balldan qarawvoren")
     await msg.answer(f"Hello - 👤 {msg.from_user.full_name}")
     print(f"👤 - {msg.from_user.full_name}")
     await msg.answer(f"Tugmalardan birini tanlang ⤵️", reply_markup=menu_buttons())
@@ -33,16 +32,13 @@ async def start_handler(msg: Message, state: FSMContext):
 async def menu_handler(msg: Message, state: FSMContext):
     response = requests.get("https://www.fitnessblender.com/")
     soup = BeautifulSoup(response.text, "html.parser")
-    for i in soup.find_all("div","title-card-group"):
-        txt1 = i.find("h2","category").text
-        await msg.answer(txt1)
-    for i in soup.find_all("div","sumary-group"):
-        txt1 = i.find("h1","content-title").text
-        await msg.answer(txt1)
-
-
-
-
+    img = soup.find("img", "lazyfade")['data-src']
+    for i in soup.find_all("div", "title-card-group"):
+        txt1 = i.find("h2", "category").text
+        img = "https://d18zdz9g6n5za7.cloudfront.net/plan/640/640-o_31_fb-low-impact-round-2-fat-loss-program-40-minutes-or-less.jpg"
+        txt2 = "FB Low Impact Round 2 - Build Muscle & Burn Fat - 40 Minutes or Less "
+        print(img)
+        await msg.answer_photo(f"{img}", caption=f"{txt1}\n\n{txt2}")
 
 
 async def main():
